@@ -5,6 +5,7 @@
 **Lab:** 12 – Terraform CI/CD on Azure with GitHub Actions  
 **Team Members:**
 - Rohan James Scott – [scot8](https://github.com/scot8)
+- Khanhduy Truong – [duytk1](https://github.com/duytk1)
 
 ---
 
