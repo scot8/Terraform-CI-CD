@@ -1,0 +1,35 @@
+name: Terraform Static Tests
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  static-analysis:
+    name: Run terraform fmt, validate & checkov
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Format Check
+        working-directory: infra/tf-app
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        working-directory: infra/tf-app
+        run: terraform validate
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Run Checkov (Security Scan)
+        working-directory: infra/tf-app
+        run: checkov -d .

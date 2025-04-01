@@ -1,0 +1,71 @@
+name: Terraform Integration & Deployment
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+jobs:
+  terraform-plan:
+    if: github.event_name == 'pull_request'
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Init
+        working-directory: infra/tf-app
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: infra/tf-app
+        run: terraform plan -no-color > plan.txt
+
+      - name: Comment Terraform Plan on PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-path: infra/tf-app/plan.txt
+
+  terraform-deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Terraform Apply (Deploy to Azure)
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Init
+        working-directory: infra/tf-app
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: infra/tf-app
+        run: terraform apply -auto-approve

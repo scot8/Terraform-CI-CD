@@ -18,5 +18,6 @@ terraform {
     storage_account_name = "scot0568tfsa86431"
     container_name       = "tfstate"
     key                  = "prod.app.tfstate"
+    use_oidc             = true
   }
 }
