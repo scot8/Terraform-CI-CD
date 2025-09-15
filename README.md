@@ -4,7 +4,7 @@
 
 ## 📦 Project Overview
 
-This lab demonstrates a full CI/CD pipeline using GitHub Actions to automate testing, security checks, and deployment of Terraform-based Azure infrastructure. It also includes daily drift detection to monitor for out-of-band changes.
+This project demonstrates a full CI/CD pipeline using GitHub Actions to automate testing, security checks, and deployment of Terraform-based Azure infrastructure. It also includes daily drift detection to monitor for out-of-band changes.
 
 ---
 
