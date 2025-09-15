@@ -1,4 +1,4 @@
-# CST8918 - Lab 12: Terraform CI/CD on Azure with GitHub Actions
+#Terraform CI/CD on Azure with GitHub Actions
 
 **Course:** DevOps: Infrastructure as Code  
 **Professor:** Robert McKenney  
